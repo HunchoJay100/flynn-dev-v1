@@ -62,7 +62,22 @@ p.body{font-size:17px;line-height:1.5;color:var(--ink-2)}
 .nav.solid{height:72px;background:rgba(253,253,253,.9);backdrop-filter:blur(14px) saturate(160%);-webkit-backdrop-filter:blur(14px) saturate(160%);color:var(--ink);box-shadow:0 1px 0 var(--hair)}
 .nav.solid .brand img{width:32px;height:32px}
 .nav.solid .btn-white{background:var(--ink);color:#fff}
-@media(max-width:860px){.nav-links{display:none}}
+/* phone menu */
+.menu-btn{display:none;width:44px;height:44px;border:0;background:transparent;color:inherit;cursor:pointer;padding:0;align-items:center;justify-content:center}
+.menu-btn span{display:block;width:22px;height:2px;background:currentColor;position:relative;transition:transform .3s var(--ease),background .3s var(--ease)}
+.menu-btn span::before,.menu-btn span::after{content:"";position:absolute;left:0;width:22px;height:2px;background:currentColor;transition:transform .3s var(--ease),top .3s var(--ease)}
+.menu-btn span::before{top:-7px}.menu-btn span::after{top:7px}
+body.menu-open .menu-btn span{background:transparent}
+body.menu-open .menu-btn span::before{top:0;transform:rotate(45deg)}
+body.menu-open .menu-btn span::after{top:0;transform:rotate(-45deg)}
+.menu{position:fixed;inset:0;z-index:40;background:var(--paper);color:var(--ink);display:flex;flex-direction:column;justify-content:center;padding:96px var(--gutter) 48px;opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .4s var(--ease-sheet),transform .4s var(--ease-sheet),visibility 0s .4s}
+body.menu-open .menu{opacity:1;visibility:visible;transform:none;transition:opacity .4s var(--ease-sheet),transform .4s var(--ease-sheet)}
+body.menu-open{overflow:hidden}
+body.menu-open .nav{color:var(--ink);background:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+.menu a{font-family:var(--display);font-size:clamp(36px,10vw,56px);line-height:1.1;padding:12px 0;display:block}
+.menu .btn{margin-top:32px;align-self:flex-start;font-size:14px}
+.menu .foot{margin-top:auto;font-size:15px;color:var(--muted)}
+@media(max-width:860px){.nav-links{display:none}.menu-btn{display:inline-flex}}
 
 /* sticky story panels: hero + pillars */
 .panel{position:sticky;top:0;height:100svh;min-height:600px;overflow:hidden;color:#fff;display:flex;align-items:flex-end;background:var(--dark)}
@@ -180,8 +195,16 @@ footer li a{min-height:32px;display:inline-flex;align-items:center;font-size:16p
       <a href="#contact">Contact</a>
       <a class="btn btn-white" href="#contact">Start a Project</a>
     </div>
+    <button class="menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false"><span></span></button>
   </div>
 </nav>
+<div class="menu" id="menu">
+  <a href="#work">Projects</a>
+  <a href="#story">About</a>
+  <a href="#contact">Contact</a>
+  <a class="btn btn-ink" href="#contact">Start a Project</a>
+  <div class="foot">931-510-6147 · info@flynndevelopment.co</div>
+</div>
 
 <header class="panel hero">
   <img src="img/hero-pickard-great-room.jpg" alt="Two story great room with coffered ceiling, black framed doors and open kitchen">
@@ -307,6 +330,9 @@ thumb.addEventListener('pointerdown',e=>{sd=true;sx=e.clientX;st=thumb.getBoundi
 thumb.addEventListener('pointermove',e=>{if(!sd)return;scrubTo(st+(e.clientX-sx)+thumb.getBoundingClientRect().width/2)});
 thumb.addEventListener('pointerup',()=>sd=false);
 scrub.addEventListener('click',e=>{if(e.target===thumb)return;scrubTo(e.clientX)});
+const menuBtn=document.getElementById('menuBtn');
+menuBtn.onclick=()=>{const open=document.body.classList.toggle('menu-open');menuBtn.setAttribute('aria-expanded',open)};
+document.querySelectorAll('#menu a').forEach(a=>a.addEventListener('click',()=>{document.body.classList.remove('menu-open');menuBtn.setAttribute('aria-expanded','false')}));
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12,rootMargin:'0px 0px -40px 0px'});
 document.querySelectorAll('.rv').forEach(el=>io.observe(el));
 </script>
