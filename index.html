@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flynn Development | Built for Generations.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FDFDFD;
+  --stone:#EEECE9;
+  --ink:#0C0C0C;
+  --ink-2:#3A3A3A;
+  --muted:#939393;
+  --hair:rgba(12,12,12,.12);
+  --hair-light:rgba(255,255,255,.2);
+  --gold:#A8893D;
+  --dark:#0C0C0C;
+  --display:'Cal Sans','Fahkwang',sans-serif;
+  --body:'Source Sans 3',-apple-system,system-ui,sans-serif;
+  --ease:cubic-bezier(.2,0,0,1);
+  --ease-sheet:cubic-bezier(.32,.72,0,1);
+  --gutter:clamp(16px,5vw,96px);
+  --max:1440px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{font-family:var(--body);font-size:17px;line-height:1.45;color:var(--ink);background:var(--paper)}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gutter)}
+
+/* type */
+.eyebrow{font-family:var(--display);font-size:13px;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+h1,h2,h3,blockquote{font-family:var(--display);font-weight:400;line-height:1;letter-spacing:-.015em}
+h1{font-size:clamp(48px,7.5vw,104px)}
+h2{font-size:clamp(36px,4.8vw,72px)}
+h3{font-size:clamp(26px,2.6vw,40px)}
+p.lead{font-size:clamp(18px,1.4vw,22px);line-height:1.4;color:var(--ink)}
+p.body{font-size:17px;line-height:1.5;color:var(--ink-2)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:0 28px;border-radius:8px;font-family:var(--display);font-size:14px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;transition:transform .3s var(--ease),background .3s var(--ease),color .3s var(--ease)}
+.btn:hover{transform:scale(.975)}
+.btn-ink{background:var(--ink);color:#fff}
+.btn-white{background:#fff;color:var(--ink)}
+.btn-ghost{color:#fff;border:1px solid rgba(255,255,255,.6)}
+.btn-ghost:hover{background:rgba(255,255,255,.12);border-color:#fff}
+.link{font-family:var(--display);font-size:14px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px;min-height:44px}
+.link::after{content:"→";transition:transform .3s var(--ease)}
+.link:hover::after{transform:translateX(4px)}
+
+/* nav: shrinks and gains a background after 100px */
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;height:88px;display:flex;align-items:center;color:#fff;transition:all .6s var(--ease-sheet)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;width:100%}
+.brand{display:flex;align-items:center;gap:12px;min-height:44px}
+.brand img{width:40px;height:40px;object-fit:contain;transition:width .6s var(--ease-sheet),height .6s var(--ease-sheet)}
+.brand span{font-family:var(--display);font-size:17px;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{font-family:var(--display);font-size:14px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;min-height:44px;display:inline-flex;align-items:center}
+.nav .btn{min-height:44px;padding:0 22px;font-size:13px}
+.nav.solid{height:72px;background:rgba(253,253,253,.9);backdrop-filter:blur(14px) saturate(160%);-webkit-backdrop-filter:blur(14px) saturate(160%);color:var(--ink);box-shadow:0 1px 0 var(--hair)}
+.nav.solid .brand img{width:32px;height:32px}
+.nav.solid .btn-white{background:var(--ink);color:#fff}
+@media(max-width:860px){.nav-links a:not(.btn){display:none}}
+
+/* sticky story panels: hero + pillars */
+.panel{position:sticky;top:0;height:100svh;min-height:600px;overflow:hidden;color:#fff;display:flex;align-items:flex-end;background:var(--dark)}
+.panel img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.panel::after{content:"";position:absolute;inset:0;background:rgba(12,12,12,var(--ov,.45))}
+.panel .wrap{position:relative;z-index:1;width:100%;padding-bottom:clamp(80px,15vh,160px);display:flex;flex-direction:column;align-items:center;text-align:center}
+.panel .n{font-family:var(--display);font-size:14px;letter-spacing:.2em;color:rgba(255,255,255,.7);margin-bottom:24px}
+.panel h1,.panel h2{max-width:14ch;margin-left:auto;margin-right:auto}
+.panel p{font-size:clamp(17px,1.35vw,21px);line-height:1.4;max-width:52ch;color:rgba(255,255,255,.9);margin-top:24px}
+.panel .actions{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap;justify-content:center}
+.hero{--ov:.3}
+.story .panel{align-items:center}
+.story .panel::after{background:linear-gradient(to right,rgba(12,12,12,.78) 0%,rgba(12,12,12,.55) 35%,rgba(12,12,12,.12) 70%,rgba(12,12,12,.05) 100%)}
+.story .panel .wrap{align-items:flex-start;text-align:left;padding-bottom:0}
+.story .panel h2{margin:0;max-width:11ch}
+.story .panel p{max-width:42ch;font-size:clamp(17px,1.25vw,20px)}
+.story .panel .n{margin-bottom:20px}
+.rise{opacity:0;transform:translateY(18px);animation:rise .7s var(--ease) forwards}
+@keyframes rise{to{opacity:1;transform:none}}
+
+/* flow sections cover the sticky panels */
+.flow{position:relative;z-index:2;background:var(--paper)}
+section{padding:clamp(80px,9vw,128px) 0}
+
+/* who we are */
+.intro .two{display:grid;grid-template-columns:5fr 6fr;gap:64px;align-items:start}
+.intro h2{max-width:12ch;margin-top:16px}
+.stack>*+*{margin-top:24px}
+@media(max-width:860px){.intro .two{grid-template-columns:1fr;gap:32px}}
+
+/* quote band */
+.band{position:relative;height:88vh;min-height:560px;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;overflow:hidden}
+.band img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%}
+.band::after{content:"";position:absolute;inset:0;background:rgba(12,12,12,.5)}
+.band .wrap{position:relative;z-index:1}
+.band blockquote{font-size:clamp(32px,4.4vw,64px);max-width:20ch;margin:0 auto}
+
+/* mosaic */
+.work .head{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:56px}
+.work .head h2{margin-top:16px}
+.work .head p{margin-top:20px;max-width:44ch;color:var(--ink-2);font-size:18px;line-height:1.5}
+.four{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.tile{position:relative;color:#fff;display:block;overflow:hidden}
+.tile .ph{aspect-ratio:16/10;overflow:hidden;background:#222}
+.tile img{width:100%;height:100%;object-fit:cover;transition:transform 1.4s var(--ease);filter:saturate(.72) contrast(1.02) brightness(1.06)}
+.tile::after{content:"";position:absolute;inset:0;background:rgba(38,34,28,.12);transition:background .4s var(--ease)}
+.tile:hover img{transform:scale(1.03)}
+.tile:hover::after{background:rgba(38,34,28,.26)}
+.tile .cap{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center}
+.tile .cap span{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 28px;border:1px solid rgba(255,255,255,.7);border-radius:8px;font-family:var(--display);font-size:13px;font-weight:400;letter-spacing:.14em;text-transform:uppercase;transition:all .3s var(--ease)}
+.tile:hover .cap span{background:#fff;color:var(--ink);border-color:#fff}
+.work-foot{padding:56px 0 0;text-align:center}
+@media(max-width:760px){.four{grid-template-columns:1fr}.tile .ph{aspect-ratio:3/2}}
+
+/* story wrapper for the four pillar panels */
+.story{position:relative}
+
+/* details: carousel with the next slide peeking in */
+.details .head{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;margin-bottom:40px;flex-wrap:wrap}
+.details .head h2{margin-top:16px}
+.rail{display:flex;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 var(--gutter) 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch;cursor:grab;scroll-behavior:smooth}
+.rail.dragging{cursor:grabbing;scroll-snap-type:none;scroll-behavior:auto;user-select:none}
+.rail.dragging img{pointer-events:none}
+.arrows{display:flex;gap:8px}
+.arrows button{width:48px;height:48px;border-radius:50%;border:1px solid var(--hair);background:transparent;color:var(--ink);font-size:18px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:background .3s var(--ease),color .3s var(--ease),border-color .3s var(--ease)}
+.arrows button:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+.scrub{position:relative;height:24px;margin:24px var(--gutter) 0;cursor:pointer}
+.scrub::before{content:"";position:absolute;left:0;right:0;top:11px;height:1px;background:var(--hair)}
+.scrub i{position:absolute;top:10px;height:3px;width:20%;left:0;background:var(--ink);border-radius:2px;cursor:grab}
+.scrub i:active{cursor:grabbing}
+.rail::-webkit-scrollbar{display:none}
+.rail figure{flex:0 0 auto;width:min(46vw,640px);scroll-snap-align:start}
+.rail img{aspect-ratio:4/3;width:100%;object-fit:cover}
+.rail figcaption{font-family:var(--display);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding-top:12px}
+@media(max-width:760px){.rail figure{width:80vw}}
+
+/* two-panel CTA, zero gap, headline inside each */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.duo a{position:relative;min-height:70vh;display:flex;align-items:flex-end;color:#fff;overflow:hidden;background:#222}
+.duo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.4s var(--ease)}
+.duo a::after{content:"";position:absolute;inset:0;background:rgba(12,12,12,.4);transition:background .4s var(--ease)}
+.duo a:hover img{transform:scale(1.03)}
+.duo a:hover::after{background:rgba(12,12,12,.55)}
+.duo .in{position:relative;z-index:1;padding:clamp(32px,4vw,64px)}
+.duo h3{max-width:12ch}
+.duo .link{margin-top:20px;color:#fff}
+@media(max-width:760px){.duo{grid-template-columns:1fr}.duo a{min-height:60vh}}
+
+/* footer */
+footer{padding:72px 0 40px;border-top:1px solid var(--hair)}
+.fgrid{display:grid;grid-template-columns:2fr 1fr 1.4fr;gap:48px}
+@media(max-width:760px){.fgrid{grid-template-columns:1fr;gap:32px}}
+footer .tag{margin-top:16px;color:var(--muted);font-size:15px}
+footer h4{font-family:var(--display);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;font-weight:400}
+footer ul{list-style:none}
+footer li{margin-bottom:8px}
+footer li a{min-height:32px;display:inline-flex;align-items:center;font-size:16px}
+.copy{margin-top:56px;padding-top:24px;border-top:1px solid var(--hair);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:13px;color:var(--muted)}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(20px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.rv.in{opacity:1;transform:none}
+.rv.d1{transition-delay:.05s}.rv.d2{transition-delay:.1s}.rv.d3{transition-delay:.15s}
+@media(prefers-reduced-motion:reduce){.rv,.rise{opacity:1;transform:none;animation:none;transition:none}}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#"><img src="assets/fd-monogram-green.png" alt=""><span>Flynn Development</span></a>
+    <div class="nav-links">
+      <a href="#work">Projects</a>
+      <a href="#story">About</a>
+      <a href="#contact">Contact</a>
+      <a class="btn btn-white" href="#contact">Start a Project</a>
+    </div>
+  </div>
+</nav>
+
+<header class="panel hero">
+  <img src="img/hero-pickard-great-room.jpg" alt="Two story great room with coffered ceiling, black framed doors and open kitchen">
+  <div class="wrap">
+    <h1 class="rise" style="animation-delay:.15s">Built for Generations.</h1>
+    <p class="rise" style="animation-delay:.3s">Engineering discipline. Intentional design. An unwavering commitment to the families we build for.</p>
+    <div class="actions rise" style="animation-delay:.45s">
+      <a class="btn btn-white" href="#work">View Our Work</a>
+      <a class="btn btn-ghost" href="#story">Our Story</a>
+    </div>
+  </div>
+</header>
+
+<div class="flow">
+
+<section class="intro" id="story">
+  <div class="wrap two">
+    <div class="rv">
+      <span class="eyebrow">Who We Are</span>
+      <h2>The result of years of disciplined growth and proven execution.</h2>
+    </div>
+    <div class="stack rv d2">
+      <p class="lead">Flynn Development was built on the foundation of two powerful truths: Modern Development proved what's possible when vision, leadership, and relentless effort come together to build something extraordinary, scaling into a ten-figure operation. Buildtek reinforced that success with the structural backbone, engineering discipline, and process integrity required to sustain it.</p>
+      <p class="body">Flynn Development is where those strengths unite under one roof. We are not a company built on hype. We are a company built on precision, trust, accountability, and control.</p>
+      <a class="link" href="#story">Our Story</a>
+    </div>
+  </div>
+</section>
+
+<div class="band">
+  <img src="img/band-white-kitchen.jpg" alt="White kitchen with arched opening, lantern pendants and a large island">
+  <div class="wrap rv">
+    <blockquote>“We don’t build for the moment. We build for decades of living, growth, and memories.”</blockquote>
+  </div>
+</div>
+
+<section class="work" id="work">
+  <div class="wrap head rv">
+    <span class="eyebrow">Featured Work</span>
+    <h2>Homes Built with Intention</h2>
+    <p>A few of the homes we've built for the families who trusted us with them.</p>
+  </div>
+  <div class="four">
+    <a class="tile rv" href="#work"><div class="ph"><img src="img/home-pickard.jpg" alt="N. Pickard Residence"></div></a>
+    <a class="tile rv d1" href="#work"><div class="ph"><img src="img/home-brick-1904.jpg" alt="Residence 1904"></div></a>
+    <a class="tile rv d2" href="#work"><div class="ph"><img src="img/home-brick-208.jpg" alt="Residence 208"></div></a>
+    <a class="tile rv d3" href="#work"><div class="ph"><img src="img/home-tan-brick.jpg" alt="Brick Residence"></div></a>
+  </div>
+  <div class="work-foot"><a class="link" href="#work">View All Projects</a></div>
+</section>
+
+
+<section class="details">
+  <div class="wrap head rv">
+    <div><span class="eyebrow">The Details</span><h2>Curated to the last inch.</h2></div>
+    <div class="arrows"><button type="button" id="railPrev" aria-label="Previous">←</button><button type="button" id="railNext" aria-label="Next">→</button></div>
+  </div>
+  <div class="rail" id="rail">
+    <figure class="rv"><img src="img/pickard-great-room.jpg" alt=""></figure>
+    <figure class="rv d1"><img src="img/rail-2.jpg" alt=""></figure>
+    <figure class="rv d2"><img src="img/rail-range.jpg" alt=""></figure>
+    <figure class="rv d3"><img src="img/rail-powder.jpg" alt=""></figure>
+    <figure class="rv"><img src="img/rail-5.jpg" alt=""></figure>
+    <figure class="rv d1"><img src="img/rail-tub.jpg" alt=""></figure>
+  </div>
+  <div class="scrub" id="scrub"><i id="thumb"></i></div>
+</section>
+
+<div class="duo" id="contact">
+  <a href="#contact"><img src="img/pickard-porch.jpg" alt=""><div class="in"><h3>Design and build your home with Flynn.</h3><span class="link">Start a Project</span></div></a>
+  <a href="#work"><img src="img/longstreet-front.jpg" alt=""><div class="in"><h3>See our available homes.</h3><span class="link">Available Homes</span></div></a>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <a class="brand" href="#"><img src="assets/fd-monogram-green.png" alt=""><span>Flynn Development</span></a>
+        <p class="tag">Built for Generations.</p>
+      </div>
+      <div>
+        <h4>Navigate</h4>
+        <ul><li><a href="#">Home</a></li><li><a href="#work">Projects</a></li><li><a href="#story">About</a></li><li><a href="#contact">Contact</a></li></ul>
+      </div>
+      <div>
+        <h4>Get In Touch</h4>
+        <ul>
+          <li><a href="tel:+19315106147">931-510-6147</a></li>
+          <li><a href="mailto:info@flynndevelopment.co">info@flynndevelopment.co</a></li>
+          <li><a href="#">1227 N Washington Ave, Suite 202<br>Cookeville, TN 38501</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="copy"><span>© 2026 Flynn Development. All rights reserved.</span><span>Cookeville, Tennessee</span></div>
+  </div>
+</footer>
+
+</div>
+
+<script>
+const nav=document.getElementById('nav');
+const onScroll=()=>nav.classList.toggle('solid',window.scrollY>100);
+onScroll();addEventListener('scroll',onScroll,{passive:true});
+/* details rail: arrows, drag to scroll, scrub bar */
+const rail=document.getElementById('rail'),scrub=document.getElementById('scrub'),thumb=document.getElementById('thumb');
+const step=()=>rail.querySelector('figure').getBoundingClientRect().width+24;
+document.getElementById('railPrev').onclick=()=>rail.scrollBy({left:-step(),behavior:'smooth'});
+document.getElementById('railNext').onclick=()=>rail.scrollBy({left:step(),behavior:'smooth'});
+function syncThumb(){
+  const max=rail.scrollWidth-rail.clientWidth; if(max<=0){thumb.style.width='100%';thumb.style.left='0';return}
+  const w=Math.max(8,rail.clientWidth/rail.scrollWidth*100); thumb.style.width=w+'%';
+  thumb.style.left=(rail.scrollLeft/max*(100-w))+'%';
+}
+rail.addEventListener('scroll',syncThumb,{passive:true});addEventListener('resize',syncThumb);addEventListener('load',syncThumb);syncThumb();
+let dx=0,sl=0,drag=false;
+rail.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse')return;drag=true;dx=e.clientX;sl=rail.scrollLeft;rail.classList.add('dragging');rail.setPointerCapture(e.pointerId)});
+rail.addEventListener('pointermove',e=>{if(!drag)return;rail.scrollLeft=sl-(e.clientX-dx)});
+const endDrag=()=>{drag=false;rail.classList.remove('dragging')};
+rail.addEventListener('pointerup',endDrag);rail.addEventListener('pointercancel',endDrag);
+let sd=false,sx=0,st=0;
+const scrubTo=x=>{const r=scrub.getBoundingClientRect();const tw=thumb.getBoundingClientRect().width;const p=Math.min(1,Math.max(0,(x-r.left-tw/2)/(r.width-tw)));rail.classList.add('dragging');rail.scrollLeft=p*(rail.scrollWidth-rail.clientWidth);rail.classList.remove('dragging')};
+thumb.addEventListener('pointerdown',e=>{sd=true;sx=e.clientX;st=thumb.getBoundingClientRect().left;thumb.setPointerCapture(e.pointerId);e.stopPropagation()});
+thumb.addEventListener('pointermove',e=>{if(!sd)return;scrubTo(st+(e.clientX-sx)+thumb.getBoundingClientRect().width/2)});
+thumb.addEventListener('pointerup',()=>sd=false);
+scrub.addEventListener('click',e=>{if(e.target===thumb)return;scrubTo(e.clientX)});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
