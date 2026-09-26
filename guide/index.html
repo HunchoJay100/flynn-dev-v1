@@ -239,14 +239,55 @@ img{display:block;max-width:100%}
 .folio--recto{justify-content:flex-end}
 
 
-/* ---------- phone fit (preview only) ---------- */
-@media (max-width:900px){
-  .preview-bar{padding:10px 14px;font-size:9.5px;letter-spacing:.14em;gap:10px}
-  .preview-bar button{padding:6px 8px}
-  .sheet{padding:20px 12px 60px;gap:28px}
-  .sheet__label{margin-bottom:-18px}
+/* ---------- phone layout (screen only, preview) ----------
+   Under 700px the interior pages reflow into one column at readable sizes.
+   The cover keeps its poster layout and is scaled to the screen width by JS. */
+@media screen and (max-width:700px){
+  body{overflow-x:hidden}
+  .preview-bar{padding:10px 14px;font-size:9px;letter-spacing:.12em;gap:10px;line-height:1.4}
+  .preview-bar button{padding:6px 8px;white-space:nowrap}
+  .sheet{padding:18px 0 60px;gap:26px;align-items:stretch}
+  .sheet__label{width:auto!important;margin:0 16px -14px}
+  .page--cover{align-self:center}
+  .page:not(.page--cover){width:auto;height:auto;padding:22px 18px 28px;overflow:visible;display:block}
+  /* photos become full-width blocks */
+  .page:not(.page--cover) .slot{position:relative;inset:auto;width:calc(100% + 36px);margin:0 -18px 22px;height:64vw;top:auto;left:auto;right:auto;bottom:auto}
+  .page:not(.page--cover) .slot__tag{left:12px;right:auto;top:auto;bottom:12px;max-width:80%}
+  .page--recto .col,.p2__col,.p8__col,.p3 .col,.phase-block__text{position:static;display:block;inset:auto}
+  .band{position:relative;height:64vw;margin:-22px -18px 22px;top:auto;left:auto;right:auto}
+  .band .slot{position:absolute;inset:0;width:100%;margin:0;height:100%}
+  .band__title{left:18px;right:18px;bottom:20px}
+  .band__title h2{font-size:28px}
+  .phase-block{position:static;height:auto;display:block}
+  .phase-block--b{margin-top:30px}
+  .phases{columns:1}
+  .phases li{margin-bottom:22px}
+  .p4 .folio{position:static;margin-top:26px}
+  .contract{grid-template-columns:1fr;row-gap:18px}
+  .contact-grid{grid-template-columns:1fr;gap:14px}
+  .glance{grid-template-columns:1fr;gap:12px}
+  .facts{flex-direction:column;border:0}
+  .facts li{padding:6px 0;border:0}
+  .facts li + li{border:0;padding-left:0}
+  .running-head{margin-bottom:22px!important}
+  .p2__col .display,.p3 .display,.phase-title,.p8__col .display{margin-top:0!important;max-width:none}
+  .p2__col .wordmark,.p8__col .wordmark{margin:14px 0 18px}
+  .display{font-size:32px}
+  .phase-title{font-size:28px}
+  .p5 .phase-title,.p7 .phase-title{font-size:30px}
+  .letter p,.who__lead,.phase-body p,.p3__lead,.phases__sum,.prep__sum,.p7__intro,.p8__body,.note p,.policy__note,.back__next p{font-size:15px;line-height:1.6;max-width:none}
+  .glance span,.contact-grid .addr{font-size:14px;line-height:1.5}
+  .glance b,.contact-grid b,.spec b{font-size:10px}
+  .phases__name,.prep__name{font-size:17px}
+  .phases__num{font-size:40px}
+  .prep li{grid-template-columns:44px 1fr}
+  .prep__num{font-size:30px}
+  .policy__line{font-size:20px}
+  .signature__name{font-size:26px}
+  .folio{margin-top:26px!important;padding-top:0}
+  .p2__col .rule--stone{margin:24px 0 20px}
+  .note,.policy{margin-top:22px}
 }
-
 /* ---------- print (PDF build) ---------- */
 @media print{
   body{background:#fff}
@@ -496,11 +537,12 @@ img{display:block;max-width:100%}
 
 <script>
 
-  // phone fit: zoom every page so the 8.5in trim fits the screen width
+  // phone fit: on narrow screens the interior pages reflow (CSS); the cover is a poster, so scale it to the screen width
   function fitPages(){
-    const avail=Math.min(document.documentElement.clientWidth, window.innerWidth)-24;
-    const z=Math.min(1, avail/816);
-    document.querySelectorAll('.page,.sheet__label').forEach(el=>{ el.style.zoom=z; });
+    const vw=Math.min(document.documentElement.clientWidth, window.innerWidth);
+    const cover=document.querySelector('.page--cover'); if(!cover) return;
+    if(vw>700){ cover.style.zoom=''; return; }
+    cover.style.zoom=Math.min(1,(vw-32)/816);
   }
   fitPages(); window.addEventListener('resize',fitPages);
 
