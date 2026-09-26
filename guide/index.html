@@ -42,6 +42,7 @@ img{display:block;max-width:100%}
   padding:12px 22px;background:rgba(20,22,18,.92);backdrop-filter:blur(8px);color:#CFCAC0;
   font:500 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase}
 .preview-bar b{color:#fff;font-weight:600}
+.preview-bar__btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .preview-bar button{font:inherit;letter-spacing:inherit;text-transform:inherit;color:#CFCAC0;background:transparent;
   border:1px solid rgba(255,255,255,.28);padding:7px 12px;cursor:pointer;border-radius:2px}
 .preview-bar button:hover{border-color:#fff;color:#fff}
@@ -239,6 +240,16 @@ img{display:block;max-width:100%}
 .folio--recto{justify-content:flex-end}
 
 
+/* ---------- print (PDF build) ---------- */
+@media print{
+  body{background:#fff}
+  .preview-bar,.sheet__label{display:none}
+  .sheet{display:block;padding:0;gap:0}
+  .page{box-shadow:none;margin:0}
+  @page{size:calc(8.5in + 2*var(--bleed)) calc(11in + 2*var(--bleed));margin:0}
+}
+</style>
+<style id="mobileReflow" media="screen and (max-width:700px)">
 /* ---------- phone layout (screen only, preview) ----------
    Under 700px the interior pages reflow into one column at readable sizes.
    The cover keeps its poster layout and is scaled to the screen width by JS. */
@@ -288,21 +299,13 @@ img{display:block;max-width:100%}
   .p2__col .rule--stone{margin:24px 0 20px}
   .note,.policy{margin-top:22px}
 }
-/* ---------- print (PDF build) ---------- */
-@media print{
-  body{background:#fff}
-  .preview-bar,.sheet__label{display:none}
-  .sheet{display:block;padding:0;gap:0}
-  .page{box-shadow:none;margin:0}
-  @page{size:calc(8.5in + 2*var(--bleed)) calc(11in + 2*var(--bleed));margin:0}
-}
 </style>
 </head>
 <body class="show-slots">
 
 <div class="preview-bar">
   <div><b>Flynn Development</b> &nbsp;·&nbsp; Client Guide · Issue 01 · Pre-Construction &nbsp;·&nbsp; preview, all 8 pages</div>
-  <button id="slotToggle" type="button">Photo slot labels: on</button>
+  <span class="preview-bar__btns"><button id="viewToggle" type="button">Phone view: reflow</button><button id="slotToggle" type="button">Photo slot labels: on</button></span>
 </div>
 
 
@@ -537,14 +540,21 @@ img{display:block;max-width:100%}
 
 <script>
 
-  // phone fit: on narrow screens the interior pages reflow (CSS); the cover is a poster, so scale it to the screen width
+  // phone view: "reflow" = one-column layout (default under 700px); "pages" = the real 8.5x11 pages scaled to the screen.
+  // Open with ?view=pages to start in page view.
+  const reflow=document.getElementById('mobileReflow'), viewBtn=document.getElementById('viewToggle');
+  let pageView=new URLSearchParams(location.search).get('view')==='pages';
   function fitPages(){
     const vw=Math.min(document.documentElement.clientWidth, window.innerWidth);
-    const cover=document.querySelector('.page--cover'); if(!cover) return;
-    if(vw>700){ cover.style.zoom=''; return; }
-    cover.style.zoom=Math.min(1,(vw-32)/816);
+    const pages=document.querySelectorAll('.page'), labels=document.querySelectorAll('.sheet__label');
+    if(vw>700){ pages.forEach(p=>p.style.zoom=''); labels.forEach(l=>l.style.zoom=''); return; }
+    const z=Math.min(1,(vw-32)/816);
+    pages.forEach(p=>{ p.style.zoom=(pageView||p.classList.contains('page--cover'))?z:''; });
+    labels.forEach(l=>{ l.style.zoom=pageView?z:''; });
   }
-  fitPages(); window.addEventListener('resize',fitPages);
+  function applyView(){ reflow.disabled=pageView; viewBtn.textContent='Phone view: '+(pageView?'pages':'reflow'); fitPages(); }
+  viewBtn.addEventListener('click',()=>{ pageView=!pageView; applyView(); });
+  applyView(); window.addEventListener('resize',fitPages);
 
   // fill every [data-policy] card from its <template>, so the policy text lives in one place
   document.querySelectorAll('[data-policy]').forEach(el=>{
