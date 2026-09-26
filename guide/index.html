@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Flynn Development · Client Guide · Issue 01</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* =====================================================================
+   FLYNN DEVELOPMENT · CLIENT GUIDE SERIES · DESIGN SYSTEM
+   One source for print (bleed + marks) and screen (email PDF / preview).
+   Issue 01: Pre-Construction. Issue 02 (build phase) reuses everything here.
+   ===================================================================== */
+:root{
+  /* trim + safety */
+  --trim-w:8.5in; --trim-h:11in;
+  --bleed:0in;            /* print build sets this to .125in */
+  --safe:.5in;            /* text never closer than this to trim */
+  --m-out:.6in; --m-top:.7in; --m-bot:.58in;
+
+  /* palette: warm paper, stone, green-black ink, muted gold hairlines */
+  --paper:#FAF8F3; --stone:#EFEAE1; --stone-2:#E3DCCF;
+  --ink:#1F231F; --ink-2:#3D413B; --mist:#7C7F77;
+  --moss:#202620; --clay:#8C6A4F;
+  /* accent: green family, no gold (his call 9-25). --accent on paper, --accent-light over photos. */
+  --accent:#4C5A47; --accent-light:#C3CDB6;
+  /* retired gold, kept for reference: #8A6D2F on paper, #B99C5E over photos */
+
+  /* type */
+  --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+  --sans:'Inter',-apple-system,Helvetica,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{font-family:var(--sans);color:var(--ink);background:#2A2C28}
+img{display:block;max-width:100%}
+
+/* ---------- preview chrome (screen only) ---------- */
+.preview-bar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+  padding:12px 22px;background:rgba(20,22,18,.92);backdrop-filter:blur(8px);color:#CFCAC0;
+  font:500 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase}
+.preview-bar b{color:#fff;font-weight:600}
+.preview-bar button{font:inherit;letter-spacing:inherit;text-transform:inherit;color:#CFCAC0;background:transparent;
+  border:1px solid rgba(255,255,255,.28);padding:7px 12px;cursor:pointer;border-radius:2px}
+.preview-bar button:hover{border-color:#fff;color:#fff}
+.sheet{display:flex;flex-direction:column;align-items:center;gap:44px;padding:44px 24px 80px}
+.sheet__label{align-self:center;width:var(--trim-w);color:#9B9E95;font:500 10px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;margin-bottom:-32px}
+
+/* ---------- page primitive ---------- */
+.page{position:relative;width:calc(var(--trim-w) + 2*var(--bleed));height:calc(var(--trim-h) + 2*var(--bleed));
+  background:var(--paper);overflow:hidden;box-shadow:0 30px 60px -20px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.25);
+  page-break-after:always;break-after:page}
+
+/* ---------- shared type ---------- */
+.wordmark{font:500 15px/1 var(--serif);letter-spacing:.32em;text-transform:uppercase}
+.cover__masthead{text-shadow:0 1px 12px rgba(0,0,0,.45)}
+.eyebrow{font:600 10px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--accent)}
+.eyebrow--light{color:var(--accent-light)}
+.display{font:300 38px/1.1 var(--serif);color:var(--ink);letter-spacing:-.005em}
+.rule{border:0;height:1px;background:var(--stone-2)}
+.rule--accent{background:var(--accent-light);width:44px}
+.rule--stone{width:100%}
+
+/* ---------- photo slots (placeholder system) ---------- */
+.slot{position:absolute;overflow:hidden;background:var(--stone)}
+.slot img{width:100%;height:100%;object-fit:cover}
+.slot__tag{position:absolute;z-index:5;display:none;font:600 8px/1.3 var(--sans);letter-spacing:.12em;text-transform:uppercase;
+  color:#fff;background:rgba(20,22,18,.55);border:1px solid rgba(255,255,255,.55);padding:5px 7px;max-width:3.2in}
+.show-slots .slot__tag{display:block}
+.slot--empty{display:flex;align-items:center;justify-content:center;background:
+  repeating-linear-gradient(135deg,var(--stone) 0 14px,var(--stone-2) 14px 15px)}
+.slot--empty .slot__tag{position:static;display:block;color:var(--ink-2);background:var(--paper);border-color:var(--stone-2)}
+
+/* =====================================================================
+   PAGE 1 · COVER
+   ===================================================================== */
+.page--cover{background:var(--moss);color:#fff}
+.slot--full{inset:0}
+.cover__scrim{position:absolute;inset:0;z-index:2;
+  background:linear-gradient(to top,rgba(16,18,14,.9) 0%,rgba(16,18,14,.62) 28%,rgba(16,18,14,0) 60%),
+             linear-gradient(to bottom,rgba(16,18,14,.62) 0%,rgba(16,18,14,.28) 12%,rgba(16,18,14,0) 26%)}
+.cover__masthead{position:absolute;z-index:3;top:calc(var(--bleed) + .56in);left:calc(var(--bleed) + var(--m-out));right:calc(var(--bleed) + var(--m-out));
+  display:flex;justify-content:space-between;align-items:baseline}
+.cover__issue{font:600 10px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.82)}
+.cover__issue span{color:var(--accent-light);margin-left:.9em}
+.cover__title{position:absolute;z-index:3;left:calc(var(--bleed) + var(--m-out));right:calc(var(--bleed) + var(--m-out));bottom:calc(var(--bleed) + .64in)}
+.cover__title .eyebrow{margin-bottom:.22in}
+.cover__title h1{font:300 60px/1.03 var(--serif);letter-spacing:-.01em;max-width:6.3in;text-shadow:0 2px 24px rgba(0,0,0,.35)}
+.cover__title .rule{margin:.28in 0 .22in}
+.cover__dek{font:400 14px/1.55 var(--sans);color:rgba(255,255,255,.86);max-width:4.3in}
+.cover__foot{position:absolute;z-index:3;right:calc(var(--bleed) + var(--m-out));bottom:calc(var(--bleed) + .64in);
+  font:600 9.5px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.72);text-align:right}
+.cover__foot span{color:var(--accent-light);margin:0 .5em}
+.page--cover .slot__tag{top:calc(var(--bleed) + 1.05in);right:calc(var(--bleed) + var(--m-out))}
+
+/* =====================================================================
+   PAGE 2 · WELCOME + WHO WE ARE  (verso: photo on the outer/left edge)
+   ===================================================================== */
+.slot--tall-left{top:0;bottom:0;left:0;width:calc(var(--bleed) + 3.3in)}
+.slot--tall-left .slot__tag{left:calc(var(--bleed) + .3in);bottom:calc(var(--bleed) + .62in)}
+.p2__col{position:absolute;top:calc(var(--bleed) + var(--m-top));bottom:calc(var(--bleed) + var(--m-bot));
+  left:calc(var(--bleed) + 3.3in + .62in);right:calc(var(--bleed) + var(--m-out));display:flex;flex-direction:column}
+.running-head{display:flex;align-items:center;gap:.16in;font:600 9.5px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--mist)}
+.running-head i{flex:1;height:1px;background:var(--stone-2)}
+.p2__col .display{margin:.42in 0 .26in;max-width:3.6in}
+.letter p{font:400 13px/1.62 var(--sans);color:var(--ink-2);margin-bottom:.14in;text-wrap:pretty}
+.letter p:first-child::first-letter{font:400 50px/.82 var(--serif);color:var(--ink);float:left;margin:.08em .12em 0 0}
+.signature{margin-top:.2in;display:flex;flex-direction:column;gap:.06in}
+.signature__name{font:italic 400 24px/1 var(--serif);color:var(--ink)}
+.signature__role{font:600 9.5px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--mist)}
+.p2__col .rule--stone{margin:.3in 0 .26in}
+.who .eyebrow{margin-bottom:.12in}
+.who__lead{font:400 12.5px/1.6 var(--sans);color:var(--ink-2);text-wrap:pretty}
+.facts{list-style:none;display:flex;gap:0;margin-top:.2in;border-top:1px solid var(--stone-2);border-bottom:1px solid var(--stone-2)}
+.facts li{flex:1;padding:.1in .14in .1in 0;font:600 9px/1.4 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.facts li + li{border-left:1px solid var(--stone-2);padding-left:.14in}
+.folio{margin-top:auto;padding-top:.2in;display:flex;align-items:baseline;gap:.14in;font:600 9px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--mist)}
+.folio__num{font:500 13px/1 var(--serif);color:var(--accent);letter-spacing:.08em}
+
+
+/* =====================================================================
+   PAGE 3 · THE FIVE PHASES
+   One photo bleeds off the top with the page headline on it, then the
+   five phases written out in full. The cost card lives on page 6 only.
+   ===================================================================== */
+.band{position:absolute;top:0;left:0;right:0;height:calc(var(--bleed) + 3.45in);background:var(--moss)}
+.band .slot{position:absolute;inset:0}
+.band::after{content:"";position:absolute;inset:0;z-index:2;background:linear-gradient(to top,rgba(16,18,14,.9) 0%,rgba(16,18,14,.66) 30%,rgba(16,18,14,.22) 56%,rgba(16,18,14,0) 76%)}
+.band__title{position:absolute;z-index:3;left:calc(var(--bleed) + .7in);right:calc(var(--bleed) + var(--m-out));bottom:.42in;color:#fff}
+.band__title .eyebrow{margin-bottom:.16in;color:var(--accent-light);text-shadow:0 1px 10px rgba(0,0,0,.5)}
+.band__title h2{font:300 40px/1.05 var(--serif);letter-spacing:-.005em;max-width:5.6in;text-shadow:0 2px 20px rgba(0,0,0,.35)}
+.band .slot__tag{top:calc(var(--bleed) + .5in);right:calc(var(--bleed) + var(--m-out))}
+.page--recto .col{position:absolute;top:calc(var(--bleed) + var(--m-top));bottom:calc(var(--bleed) + var(--m-bot));
+  left:calc(var(--bleed) + .7in);right:calc(var(--bleed) + var(--m-out));display:flex;flex-direction:column}
+.p3 .col{top:calc(var(--bleed) + 3.45in + .42in)}
+.phases{list-style:none;columns:2;column-gap:.5in}
+.phases li{break-inside:avoid;display:block;margin-bottom:.3in}
+.phases__num{display:block;font:300 42px/1 var(--serif);color:var(--accent);letter-spacing:-.02em;margin-bottom:.09in}
+.phases__name{font:600 14.5px/1.2 var(--sans);letter-spacing:-.01em;color:var(--ink);margin-bottom:.06in}
+.phases__sum{font:400 12px/1.52 var(--sans);color:var(--ink-2);text-wrap:pretty}
+
+
+/* =====================================================================
+   SHARED · phase pages (4, 5, 6)
+   ===================================================================== */
+.phase-eyebrow{font:600 10px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:.14in}
+.phase-title{font:300 30px/1.1 var(--serif);color:var(--ink);letter-spacing:-.005em;margin-bottom:.2in;max-width:4in}
+.phase-body p{font:400 12.5px/1.58 var(--sans);color:var(--ink-2);margin-bottom:.13in;text-wrap:pretty}
+.glance{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:.3in;margin-top:.22in}
+.glance b{display:block;font:600 9px/1.4 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:.05in}
+.glance span{font:400 11px/1.5 var(--sans);color:var(--ink-2);text-wrap:pretty}
+
+/* =====================================================================
+   PAGE 4 · PHASE 01 + PHASE 02  (verso: photos top-left and bottom-right)
+   ===================================================================== */
+.phase-block{position:absolute;left:0;right:0;height:calc(var(--bleed) + 5.25in)}
+.phase-block--a{top:0}
+.phase-block--b{bottom:0}
+.phase-block .slot{position:absolute;top:0;bottom:0;width:calc(var(--bleed) + 3.05in)}
+.phase-block--a .slot{left:0}
+.phase-block--b .slot{right:0}
+.phase-block--a .slot__tag{left:calc(var(--bleed) + .28in);bottom:.3in}
+.phase-block--b .slot__tag{right:calc(var(--bleed) + .28in);bottom:calc(var(--bleed) + .6in)}
+.phase-block__text{position:absolute;display:flex;flex-direction:column}
+.phase-block--a .phase-block__text{top:calc(var(--bleed) + var(--m-top));bottom:.3in;left:calc(var(--bleed) + 3.05in + .5in);right:calc(var(--bleed) + var(--m-out))}
+.phase-block--b .phase-block__text{top:.3in;bottom:calc(var(--bleed) + var(--m-bot) + .38in);left:calc(var(--bleed) + var(--m-out));right:calc(var(--bleed) + 3.05in + .5in)}
+.phase-block .running-head{margin-bottom:.48in}
+.p4 .folio{position:absolute;left:calc(var(--bleed) + var(--m-out));bottom:calc(var(--bleed) + var(--m-bot));margin:0;padding:0}
+
+/* =====================================================================
+   PAGE 5 · PHASE 03 DESIGN  (recto: tall photo on the outer/right edge)
+   ===================================================================== */
+.slot--tall-right{top:0;bottom:0;right:0;width:calc(var(--bleed) + 3.3in)}
+.slot--tall-right .slot__tag{right:calc(var(--bleed) + .3in);bottom:calc(var(--bleed) + .62in)}
+.p5 .col{right:calc(var(--bleed) + 3.3in + .55in)}
+.p5 .running-head{margin-bottom:.5in}
+.p5 .phase-title{font-size:36px;max-width:3.9in}
+.p5 .phase-body p{font-size:13px}
+.note{margin-top:.34in;background:var(--stone);border-left:2px solid var(--accent);padding:.18in .24in .2in}
+.note .eyebrow{margin-bottom:.08in}
+.note p{font:400 12px/1.55 var(--sans);color:var(--ink-2);text-wrap:pretty}
+
+
+/* =====================================================================
+   PAGE 6 · PHASE 04 FINAL ESTIMATE + PHASE 05 CONTRACT  (verso)
+   Top block = page 4's photo-left block. Bottom block has no photo:
+   contract copy on the left, the editable cost card on the right.
+   ===================================================================== */
+.p6 .phase-block--b .phase-block__text{left:calc(var(--bleed) + var(--m-out));right:calc(var(--bleed) + var(--m-out));top:.34in}
+.contract{display:grid;grid-template-columns:1fr 2.6in;column-gap:.45in;align-items:start}
+.contract .policy{margin-top:.04in}
+
+
+/* =====================================================================
+   PAGE 7 · HOW TO PREPARE  (recto: tall photo on the outer/right edge,
+   four numbered items stacked in the column, no rules)
+   ===================================================================== */
+.p7 .col{right:calc(var(--bleed) + 3.3in + .55in)}
+.p7 .running-head{margin-bottom:.5in}
+.p7 .phase-title{font-size:36px;max-width:3.9in}
+.p7__intro{font:400 13px/1.6 var(--sans);color:var(--ink-2);max-width:4in;text-wrap:pretty;margin-bottom:.34in}
+.prep{list-style:none}
+.prep li{display:grid;grid-template-columns:.55in 1fr;column-gap:.14in;margin-bottom:.26in;align-items:start}
+.prep__num{font:300 34px/1 var(--serif);color:var(--accent);letter-spacing:-.02em;margin-top:-.02in}
+.prep__name{font:600 14px/1.25 var(--sans);letter-spacing:-.01em;color:var(--ink);margin-bottom:.05in}
+.prep__sum{font:400 12px/1.52 var(--sans);color:var(--ink-2);text-wrap:pretty}
+
+/* =====================================================================
+   PAGE 8 · BACK COVER  (verso, mirror of page 2: tall photo on the
+   outer/left edge, editorial column on the right, same system as the
+   rest of the book)
+   ===================================================================== */
+.page--back{background:var(--paper);color:var(--ink)}
+.p8__col{position:absolute;top:calc(var(--bleed) + var(--m-top));bottom:calc(var(--bleed) + var(--m-bot));
+  left:calc(var(--bleed) + 3.3in + .62in);right:calc(var(--bleed) + var(--m-out));display:flex;flex-direction:column}
+.p8__col .wordmark{margin:.62in 0 .3in;color:var(--ink)}
+.p8__col .wordmark .slot__tag{position:static;display:none;margin-top:.1in;color:var(--ink-2);background:var(--stone);border-color:var(--stone-2);letter-spacing:.12em;font-size:8px;max-width:none}
+.show-slots .p8__col .wordmark .slot__tag{display:inline-block}
+.p8__col .display{margin:0 0 .22in;max-width:3.7in}
+.p8__body{font:400 13px/1.62 var(--sans);color:var(--ink-2);text-wrap:pretty;max-width:3.8in}
+.contact-grid{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:.26in .3in;margin-top:.42in}
+.contact-grid li{display:flex;flex-direction:column;gap:.06in}
+.contact-grid b{font:600 9px/1.4 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.contact-grid span{font:500 14px/1.35 var(--sans);letter-spacing:-.01em;color:var(--ink)}
+.contact-grid .addr{font:400 12px/1.5 var(--sans);color:var(--ink-2)}
+.contact-grid .wide{grid-column:1 / -1}
+.contact-grid .ph{color:var(--mist)}
+.show-slots .contact-grid .ph{border-bottom:1px dotted var(--mist)}
+.p8__col .note{margin-top:.42in}
+.p8__col .folio{margin-top:auto}
+/* ---------- EDITABLE POLICY CARD (content comes from <template id="policy-precon-cost">) ---------- */
+.policy{margin-top:auto;background:var(--stone);border-left:2px solid var(--accent-light);padding:.2in .26in .22in}
+.policy .eyebrow{margin-bottom:.09in}
+.policy__line{font:400 19px/1.3 var(--serif);color:var(--ink);text-wrap:pretty}
+.policy__note{font:400 11.5px/1.5 var(--sans);color:var(--ink-2);margin-top:.07in}
+.policy--compact .policy__line{font-size:17px}
+.folio--recto{justify-content:flex-end}
+
+
+/* ---------- phone fit (preview only) ---------- */
+@media (max-width:900px){
+  .preview-bar{padding:10px 14px;font-size:9.5px;letter-spacing:.14em;gap:10px}
+  .preview-bar button{padding:6px 8px}
+  .sheet{padding:20px 12px 60px;gap:28px}
+  .sheet__label{margin-bottom:-18px}
+}
+
+/* ---------- print (PDF build) ---------- */
+@media print{
+  body{background:#fff}
+  .preview-bar,.sheet__label{display:none}
+  .sheet{display:block;padding:0;gap:0}
+  .page{box-shadow:none;margin:0}
+  @page{size:calc(8.5in + 2*var(--bleed)) calc(11in + 2*var(--bleed));margin:0}
+}
+</style>
+</head>
+<body class="show-slots">
+
+<div class="preview-bar">
+  <div><b>Flynn Development</b> &nbsp;·&nbsp; Client Guide · Issue 01 · Pre-Construction &nbsp;·&nbsp; preview, all 8 pages</div>
+  <button id="slotToggle" type="button">Photo slot labels: on</button>
+</div>
+
+
+<!-- =====================================================================
+     EDITABLE POLICY · PRE-CONSTRUCTION COST
+     Edit the two lines below and nothing else. They print on page 6
+     (contract) only, at his call 9-25. If the policy changes,
+     this is the only place to touch.
+     ===================================================================== -->
+<template id="policy-precon-cost">
+  <p class="policy__line">Everything in this guide, from the first meeting through the final estimate, is provided at no cost to you.</p>
+  <p class="policy__note">The contract in Phase 5 is the first point at which any cost is owed.</p>
+</template>
+
+<main class="sheet">
+
+<div class="sheet__label">Page 1 · Cover</div>
+<section class="page page--cover" data-page="1">
+  <figure class="slot slot--full" data-slot="01">
+    <img src="img/preview/cover-pickard-great-room.jpg" alt="" style="object-position:42% 50%">
+    <figcaption class="slot__tag">Photo 01 · Pickard great room, his pick 9-25 · need the full-size original for print</figcaption>
+  </figure>
+  <div class="cover__scrim"></div>
+  <header class="cover__masthead">
+    <div class="wordmark">Flynn Development</div>
+    <div class="cover__issue">Issue No. 01 <span>Pre-Construction</span></div>
+  </header>
+  <div class="cover__title">
+    <p class="eyebrow eyebrow--light">A guide for new clients</p>
+    <h1>The home you've been picturing begins with a conversation.</h1>
+    <hr class="rule rule--accent">
+    <p class="cover__dek">What happens between our first meeting and the day we sign a contract, laid out in five phases.</p>
+  </div>
+  <footer class="cover__foot">Cookeville, Tennessee <span>·</span> The Upper Cumberland</footer>
+</section>
+
+<div class="sheet__label">Page 2 · Welcome + Who We Are</div>
+<section class="page page--verso" data-page="2">
+  <figure class="slot slot--tall-left" data-slot="02">
+    <img src="img/preview/p02-kitchen-waterfall.jpg" alt="" style="object-position:50% 50%">
+    <figcaption class="slot__tag">Photo 02 · Waterfall island kitchen with the black glass doors, his pick 9-25 · need the full-size original for print</figcaption>
+  </figure>
+  <div class="p2__col">
+    <header class="running-head"><span>Welcome</span><i></i><span>Pre-Construction Guide</span></header>
+    <h2 class="display">Thank you for thinking of us for your home.</h2>
+    <div class="letter">
+      <p>You've probably been thinking about this house for a while. Maybe you already own the land, maybe you're still looking, and maybe you have a folder of saved photos that nobody else has seen yet. Wherever you're starting from, this guide shows you exactly what happens between today and the day we sign a contract, so nothing about the process feels like a mystery.</p>
+      <p>Building in the Upper Cumberland means working with real slopes, rock, and weather, and every one of those things shapes the house and the budget. We'd rather walk you through all of it now than have you find out along the way. Over the next few pages you'll see the five phases we take every client through before a single truck shows up on your property.</p>
+      <p>We're glad you're here, and we're looking forward to getting started.</p>
+      <div class="signature">
+        <span class="signature__name">Jason and Jaden Flynn</span>
+        <span class="signature__role">Flynn Development</span>
+      </div>
+    </div>
+    <hr class="rule rule--stone">
+    <section class="who">
+      <p class="eyebrow">Who We Are</p>
+      <p class="who__lead">Flynn Development is a custom home builder based in Cookeville, and every home we build is within a short drive of our office. The crews on your job, the subs we call, and the suppliers we buy from are people we work with week after week. Our work runs through one process from the first meeting to the final walkthrough, and the pages that follow cover the part of it that happens before any dirt moves.</p>
+      <ul class="facts">
+        <li>Based in Cookeville</li>
+        <li>Building across the Upper Cumberland</li>
+        <li>Licensed general contractor</li>
+      </ul>
+    </section>
+    <footer class="folio"><span class="folio__num">02</span><span>Flynn Development · Pre-Construction Guide</span></footer>
+  </div>
+</section>
+
+<div class="sheet__label">Page 3 · The Five Phases</div>
+<section class="page page--recto p3" data-page="3">
+  <div class="band">
+    <figure class="slot" data-slot="03"><img src="img/preview/p03-brick-1904.jpg" alt="" style="object-position:50% 58%"><figcaption class="slot__tag">Photo 03 · The 1904 white brick porch house, his pick 9-25 · near print res</figcaption></figure>
+    <div class="band__title">
+      <p class="eyebrow eyebrow--light">Your Process</p>
+      <h2>The five phases that happen before we break ground.</h2>
+    </div>
+  </div>
+  <div class="col">
+    <ol class="phases">
+      <li><span class="phases__num">01</span><div class="phases__name">Initial Meeting</div><p class="phases__sum">We sit down together and learn everything you want in your home: the style, the size, and the budget you're working with. That conversation sets the direction for everything after it, so the guidance you get from us is based on what you actually want.</p></li>
+      <li><span class="phases__num">02</span><div class="phases__name">Site Meeting</div><p class="phases__sum">We come out to your land, gauge the elevation, and work out how the foundation will be handled. The land plays a huge role in cost, and seeing it in person lets us price the home far more accurately than a plan on paper ever could.</p></li>
+      <li><span class="phases__num">03</span><div class="phases__name">Design</div><p class="phases__sum">We bring in the architect and begin drawing the plans for the exact home we'll build. The drawings grow out of the first two meetings, so the style you described and the ground you're building on are both in the plans from the start.</p></li>
+      <li><span class="phases__num">04</span><div class="phases__name">Final Estimate</div><p class="phases__sum">Once we've seen the land, finished the plans, and understand your aesthetic, your must-haves, and your non-negotiables, we run a second, detailed estimate. This one prices every part of the home as accurately as possible, because the open questions from the first meeting have all been answered.</p></li>
+      <li><span class="phases__num">05</span><div class="phases__name">Contract</div><p class="phases__sum">We move into the contractual phase. The finished plans and the final estimate become the agreement we build from, and signing it is the point where the project becomes official.</p></li>
+    </ol>
+    <footer class="folio folio--recto"><span>Flynn Development · Pre-Construction Guide</span><span class="folio__num">03</span></footer>
+  </div>
+</section>
+
+<div class="sheet__label">Page 4 · Phase 01 Initial Meeting + Phase 02 Site Meeting</div>
+<section class="page page--verso p4" data-page="4">
+  <div class="phase-block phase-block--a">
+    <figure class="slot" data-slot="04"><img src="img/preview/p04-pickard-ceiling.jpg" alt="" style="object-position:58% 50%"><figcaption class="slot__tag">Photo 04 · Pickard coffered ceiling and chandelier, his pick 9-25 · need the full-size original for print</figcaption></figure>
+    <div class="phase-block__text">
+      <header class="running-head"><span>Phases 01 and 02</span><i></i><span>Pre-Construction Guide</span></header>
+      <p class="phase-eyebrow">Phase 01</p>
+      <h2 class="phase-title">The Initial Meeting</h2>
+      <div class="phase-body">
+        <p>The first meeting is a conversation. We sit down with you and learn everything you want in your home: the style you're drawn to, the size that fits your family, and the budget you're working with. We'll ask how you live day to day, what you've seen in other homes that stuck with you, and what you'd never want in your own.</p>
+        <p>Everything you tell us in that meeting becomes the information we use to guide you through every phase after it, so the plans, the estimate, and the contract are all built around what you actually want.</p>
+      </div>
+      <ul class="glance">
+        <li><b>Style</b><span>The look and feel you want, inside and out.</span></li>
+        <li><b>Size</b><span>Bedrooms, baths, and the spaces you'll use the most.</span></li>
+        <li><b>Budget</b><span>The range you're comfortable with, so we design to it from the start.</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="phase-block phase-block--b">
+    <figure class="slot" data-slot="05"><img src="img/preview/p04-kitchen-black-doors.jpg" alt="" style="object-position:38% 50%"><figcaption class="slot__tag">Photo 05 · White kitchen with the hood and black French doors, his pick 9-25 · need the full-size original for print</figcaption></figure>
+    <div class="phase-block__text">
+      <p class="phase-eyebrow">Phase 02</p>
+      <h2 class="phase-title">The Site Meeting</h2>
+      <div class="phase-body">
+        <p>After the first meeting, we come out to your land. We walk the property with you, gauge the elevation, and work out how the foundation will be handled, whether that means a slab, a crawl space, or a walkout basement on a slope.</p>
+        <p>The land plays a huge role in what a home costs. Grading, fill, the foundation type, the driveway, and how far utilities have to run all change with the ground, and none of it shows up on a floor plan. Seeing the site in person lets us price your home far more accurately than a plan alone could.</p>
+      </div>
+      <ul class="glance">
+        <li><b>Elevation</b><span>How the ground falls and where the house sits best.</span></li>
+        <li><b>Foundation</b><span>Slab, crawl space, or basement, decided by the land.</span></li>
+        <li><b>Access</b><span>Driveway length, utility runs, and septic placement.</span></li>
+      </ul>
+    </div>
+  </div>
+  <footer class="folio"><span class="folio__num">04</span><span>Flynn Development · Pre-Construction Guide</span></footer>
+</section>
+
+<div class="sheet__label">Page 5 · Phase 03 Design</div>
+<section class="page page--recto p5" data-page="5">
+  <figure class="slot slot--tall-right" data-slot="06"><img src="img/preview/p05-kitchen-greige-tall.jpg" alt="" style="object-position:50% 50%"><figcaption class="slot__tag">Photo 06 · Greige kitchen, hood and range with brass hardware, his pick 9-25 · need the full-size original for print</figcaption></figure>
+  <div class="col">
+    <header class="running-head"><span>Design</span><i></i><span>Pre-Construction Guide</span></header>
+    <p class="phase-eyebrow">Phase 03</p>
+    <h2 class="phase-title">Drawing the exact home we'll build.</h2>
+    <div class="phase-body">
+      <p>With the first two meetings behind us, we bring in the architect and begin drawing the plans for the exact home we'll build. The architect starts from everything you told us in the initial meeting and everything we learned on your land, so the drawings reflect the style you want and the ground the house will sit on.</p>
+      <p>Design is a back and forth. You'll see the plans as they take shape, we'll walk through them together, and the changes you ask for go into the next round. It's normal for the layout to shift once you see it drawn, and this is the phase where those shifts are easy to make.</p>
+      <p>When the set is finished, it becomes the basis for the final estimate and, after that, the contract. Every number in the next phase is priced from these drawings, which is why we don't estimate in detail until they're done.</p>
+    </div>
+    <ul class="glance">
+      <li><b>Floor plans</b><span>Every room, drawn to scale, with the flow you described.</span></li>
+      <li><b>Elevations</b><span>What the house looks like from each side, with materials called out.</span></li>
+      <li><b>Site plan</b><span>Where the home sits on your land, with the driveway and septic placed.</span></li>
+    </ul>
+    <aside class="note">
+      <p class="eyebrow">Your part in this phase</p>
+      <p>Look over each round of drawings and tell us what feels right and what doesn't. The big moves, like the number of bedrooms, where the garage sits, and how much porch you want, are easiest to settle here, before anything has been priced.</p>
+    </aside>
+    <footer class="folio folio--recto"><span>Flynn Development · Pre-Construction Guide</span><span class="folio__num">05</span></footer>
+  </div>
+</section>
+
+<div class="sheet__label">Page 6 · Phase 04 Final Estimate + Phase 05 Contract</div>
+<section class="page page--verso p4 p6" data-page="6">
+  <div class="phase-block phase-block--a">
+    <figure class="slot" data-slot="07"><img src="img/preview/p06-kitchen-lanterns.jpg" alt="" style="object-position:50% 50%"><figcaption class="slot__tag">Photo 07 · White kitchen with the lantern pendants and island, his pick 9-25 · near print res</figcaption></figure>
+    <div class="phase-block__text">
+      <header class="running-head"><span>Phases 04 and 05</span><i></i><span>Pre-Construction Guide</span></header>
+      <p class="phase-eyebrow">Phase 04</p>
+      <h2 class="phase-title">The Final Estimate</h2>
+      <div class="phase-body">
+        <p>By this point we've walked your land, the plans are finished, and we understand your aesthetic, your must-haves, and your non-negotiables. That's when we run the second estimate. Any numbers we've talked through before now came from the conversation and the site visit. This one comes from the finished drawings, and it prices every part of the home in detail, from the foundation the site calls for to the finishes you've pointed at along the way.</p>
+        <p>You'll see it as a line by line breakdown, so you know what each part of the house costs and where a change would move the number. If something lands higher than you expected, this is the place to adjust it, because the plans and the estimate are still yours to shape before anything is signed.</p>
+      </div>
+      <ul class="glance">
+        <li><b>Plans</b><span>The finished set from Phase 03, priced line by line.</span></li>
+        <li><b>Land</b><span>The foundation, grading, and site work your property calls for.</span></li>
+        <li><b>Selections</b><span>The finishes and fixtures you've chosen along the way.</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="phase-block phase-block--b">
+    <div class="phase-block__text">
+      <p class="phase-eyebrow">Phase 05</p>
+      <h2 class="phase-title">The Contract</h2>
+      <div class="contract">
+        <div class="phase-body">
+          <p>With the plans finished and the estimate in hand, we move into the contractual phase. The contract puts everything from the first four phases in writing: the drawings we're building from, the price we've agreed on, the schedule, and how changes get handled once we're underway.</p>
+          <p>We'll go through it together before you sign anything, and we'll answer every question you have about it. Signing is the point where the project becomes official, and the next guide in this series picks up from there.</p>
+        </div>
+        <aside class="policy policy--compact" data-policy="precon-cost"><p class="eyebrow">What this costs you</p></aside>
+      </div>
+    </div>
+  </div>
+  <footer class="folio"><span class="folio__num">06</span><span>Flynn Development · Pre-Construction Guide</span></footer>
+</section>
+
+<div class="sheet__label">Page 7 · How to Prepare</div>
+<section class="page page--recto p7" data-page="7">
+  <figure class="slot slot--tall-right" data-slot="08"><img src="img/preview/p07-longstreet-kitchen.jpg" alt="" style="object-position:45% 50%"><figcaption class="slot__tag">Photo 08 · A client's inspiration photos and a plat spread on the table, or a finished interior · stand-in shown: Longstreet</figcaption></figure>
+  <div class="col">
+    <header class="running-head"><span>Before You Come In</span><i></i><span>Pre-Construction Guide</span></header>
+    <p class="phase-eyebrow">How to Prepare</p>
+    <h2 class="phase-title">What to bring to the first meeting.</h2>
+    <p class="p7__intro">You don't need much to get started, and none of it has to be polished. These four things give us the most to work with on day one, and if you're missing one of them, come anyway and we'll work around it.</p>
+    <ol class="prep">
+      <li><span class="prep__num">01</span><div><div class="prep__name">A survey or plat of your land</div><p class="prep__sum">If you already own the property, bring the survey or the plat from your closing. It shows us the boundaries, the easements, and the shape of the lot, which is where the site meeting starts. If you're still looking at land, bring the listing and we'll talk through it together.</p></div></li>
+      <li><span class="prep__num">02</span><div><div class="prep__name">Inspiration photos</div><p class="prep__sum">Bring the screenshots, the saved posts, the folder on your phone, and the pages you tore out of a magazine. Anything that shows the look you're drawn to helps, inside and out, and it doesn't have to agree with itself yet.</p></div></li>
+      <li><span class="prep__num">03</span><div><div class="prep__name">A budget range</div><p class="prep__sum">You don't need an exact number. A range you're comfortable with, along with a sense of whether you're paying cash or financing the build, lets us design to it from the first sketch instead of cutting back later.</p></div></li>
+      <li><span class="prep__num">04</span><div><div class="prep__name">Your must-haves and non-negotiables</div><p class="prep__sum">Write down the things the house has to have and the things you won't compromise on, whether that's a main level primary suite, a covered back porch, or a shop out back. Knowing them early keeps them in the plans from the first draft, and it tells us where there's room to flex if the numbers need it.</p></div></li>
+    </ol>
+    <footer class="folio folio--recto"><span>Flynn Development · Pre-Construction Guide</span><span class="folio__num">07</span></footer>
+  </div>
+</section>
+
+<div class="sheet__label">Page 8 · Back Cover</div>
+<section class="page page--verso page--back p8" data-page="8">
+  <figure class="slot slot--tall-left" data-slot="09">
+    <img src="img/preview/p08-stairs-wide.jpg" alt="" style="object-position:83% 50%">
+    <figcaption class="slot__tag">Photo 09 · The oak stairs with the wire risers, his pick 9-26 · shown from the wider mudroom shot, the close-up only exists as a thumbnail</figcaption>
+  </figure>
+  <div class="p8__col">
+    <header class="running-head"><span>Get in Touch</span><i></i><span>Pre-Construction Guide</span></header>
+    <div class="wordmark" data-placeholder="logo">Flynn Development<br><span class="slot__tag">Logo goes here in place of the wordmark · vector file needed</span></div>
+    <h2 class="display">The next step is a conversation.</h2>
+    <p class="p8__body">Call or email when you're ready and we'll set up the first meeting. Bring what you have, even if it's only a piece of land and a folder of photos, and we'll take it from there.</p>
+    <ul class="contact-grid">
+      <li><b>Phone</b><span>931-510-6147</span></li>
+      <li><b>Email</b><span>info@moderndevelopment.co</span></li>
+      <li><b>Website</b><span>flynndevelopment.co</span></li>
+      <li class="wide"><b>Office</b><span class="addr">1227 N Washington Ave, Suite 202, Cookeville, TN 38501</span></li>
+    </ul>
+    <aside class="note">
+      <p class="eyebrow">Next in this series</p>
+      <p>Issue No. 02 covers what to expect once the build begins, from the first day on site through the day you move in.</p>
+    </aside>
+    <footer class="folio"><span class="folio__num">08</span><span>Flynn Development · Pre-Construction Guide</span></footer>
+  </div>
+</section>
+
+</main>
+
+<script>
+
+  // phone fit: zoom every page so the 8.5in trim fits the screen width
+  function fitPages(){
+    const avail=Math.min(document.documentElement.clientWidth, window.innerWidth)-24;
+    const z=Math.min(1, avail/816);
+    document.querySelectorAll('.page,.sheet__label').forEach(el=>{ el.style.zoom=z; });
+  }
+  fitPages(); window.addEventListener('resize',fitPages);
+
+  // fill every [data-policy] card from its <template>, so the policy text lives in one place
+  document.querySelectorAll('[data-policy]').forEach(el=>{
+    const t=document.getElementById('policy-'+el.dataset.policy); if(t) el.append(t.content.cloneNode(true));
+  });
+  const b=document.body,t=document.getElementById('slotToggle');
+  t.addEventListener('click',()=>{b.classList.toggle('show-slots');t.textContent='Photo slot labels: '+(b.classList.contains('show-slots')?'on':'off')});
+</script>
+</body>
+</html>
