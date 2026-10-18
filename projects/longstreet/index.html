@@ -159,10 +159,11 @@ footer li a{min-height:32px;display:inline-flex;align-items:center;font-size:16p
 .grow.g1{grid-template-columns:1fr}.grow.g2{grid-template-columns:1fr 1fr}.grow.g3{grid-template-columns:repeat(3,1fr)}
 .grow button{display:block;border:0;padding:0;margin:0;background:#222;cursor:zoom-in;overflow:hidden;position:relative}
 .grow.g1 button{aspect-ratio:16/9}.grow.g2 button{aspect-ratio:3/2}.grow.g3 button{aspect-ratio:5/7}
+.grow.gv button{aspect-ratio:4/5}
 .grow img{width:100%;height:100%;object-fit:cover;transition:transform 1.4s var(--ease)}
 .grow button:hover img{transform:scale(1.03)}
 .grow button:focus-visible{outline:3px solid var(--ink);outline-offset:-3px}
-@media(max-width:760px){.grow.g2,.grow.g3{grid-template-columns:1fr}.grow.g1 button,.grow.g2 button{aspect-ratio:3/2}.grow.g3 button{aspect-ratio:4/5}}
+@media(max-width:760px){.grow.g2,.grow.g3{grid-template-columns:1fr}.grow.g1 button,.grow.g2 button{aspect-ratio:3/2}.grow.g3 button,.grow.gv button{aspect-ratio:4/5}}
 .nexthome{display:block;position:relative;color:#fff;overflow:hidden;background:#222;margin-top:clamp(80px,9vw,128px)}
 .nexthome img{width:100%;height:clamp(320px,50vh,560px);object-fit:cover;filter:saturate(.72) contrast(1.02) brightness(1.06);transition:transform 1.4s var(--ease)}
 .nexthome::after{content:"";position:absolute;inset:0;background:rgba(12,12,12,.4);transition:background .4s var(--ease)}
